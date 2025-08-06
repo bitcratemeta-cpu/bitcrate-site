@@ -7,28 +7,53 @@
   <meta name="description" content="Bit Crate Token (BCT) on Polygon. 100M supply, no transfer tax. Official links, contract address, and launch details.">
   <meta name="theme-color" content="#00E5FF" />
   <style>
-    :root{--bg:#0b0f13;--card:#111722;--text:#e6f1ff;--muted:#96a2b8;--b1:#00E5FF;--b2:#00FF95}
+    :root{--bg:#0b0f13;--card:#111722;--text:#e6f1ff;--muted:#96a2b8;--b1:#00E5FF;--b2:#00FF95;--stroke:#1d2636}
     *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
     a{color:var(--b1);text-decoration:none}
     .container{max-width:1024px;margin:0 auto;padding:28px}
     .hero{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
-    .logo{width:88px;height:88px;border-radius:16px;background:linear-gradient(135deg,var(--b1),var(--b2));display:flex;align-items:center;justify-content:center;padding:6px}
+    .logo{width:88px;height:88px;border-radius:16px;background:linear-gradient(135deg,var(--b1),var(--b2));display:flex;align-items:center;justify-content:center;padding:6px;box-shadow:0 10px 30px rgba(0,229,255,.2)}
     h1{margin:0;font-size:32px}
-    .badge{display:inline-flex;gap:8px;align-items:center;background:#0f1624;border:1px solid #1d2636;color:#9bb0c9;padding:6px 10px;border-radius:999px;font-size:12px}
+    .badge{display:inline-flex;gap:8px;align-items:center;background:#0f1624;border:1px solid var(--stroke);color:#9bb0c9;padding:6px 10px;border-radius:999px;font-size:12px}
     .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
     .btn{background:linear-gradient(135deg,var(--b1),var(--b2));color:#001016;border:none;padding:10px 14px;border-radius:12px;font-weight:600}
-    .btn.alt{background:#121b2b;color:#cfe1ff;border:1px solid #22314a}
+    .btn.alt{background:#121b2b;color:#cfe1ff;border:1px solid #22314a;min-width:76px}
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:24px}
-    .card{grid-column:span 12;background:var(--card);border:1px solid #1d2636;border-radius:16px;padding:18px}
+    .card{grid-column:span 12;background:var(--card);border:1px solid var(--stroke);border-radius:16px;padding:18px}
     @media(min-width:900px){.col-6{grid-column:span 6}}
     .kv{display:grid;grid-template-columns:160px 1fr;gap:8px}
     .kv div{padding:6px 0;border-bottom:1px dashed #1e2a3f}.kv div:last-child{border-bottom:none}
     .label{color:var(--muted)}
-    code{background:#0f1624;border:1px solid #1d2636;color:#cfe1ff;padding:6px 8px;border-radius:8px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-    .hr{height:1px;background:#1d2636;margin:16px 0}.footer{color:#7f93b2;font-size:12px;margin-top:20px}
+    /* — آدرس‌ها: جلوگیری از بیرون‌زدن و نمایش با کوتاه‌سازی وسط — */
+    .addrRow{display:flex;align-items:center;gap:12px}
+    .addrLabel{flex:0 0 120px;color:var(--muted)}
+    .addrBox{flex:1;display:flex;align-items:center;gap:10px;min-width:0}
+    .addrText{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+      background:#0f1624;border:1px solid var(--stroke);color:#cfe1ff;padding:8px 10px;border-radius:10px;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .hr{height:1px;background:var(--stroke);margin:16px 0}
+    .footer{color:#7f93b2;font-size:12px;margin-top:20px}
   </style>
   <script>
-    function copyTxt(id){navigator.clipboard.writeText(document.getElementById(id).textContent.trim());const b=document.getElementById(id+'btn');if(b){b.textContent='Copied!';setTimeout(()=>b.textContent='Copy',1600);}}
+    // کوتاه‌سازی نمایش: 0x1234...ABCD
+    function shorten(addr, head=8, tail=6){
+      if(!addr) return "";
+      const a = addr.trim();
+      return a.length > head + tail + 2 ? a.slice(0, head+2) + "…" + a.slice(-tail) : a;
+    }
+    // کپی آدرس کامل (از data-full اگر بود)
+    function copyAddr(id){
+      const el = document.getElementById(id);
+      const full = el?.dataset?.full || el.textContent.trim();
+      navigator.clipboard.writeText(full);
+      const b = document.getElementById(id+'btn'); if(b){ b.textContent='Copied!'; setTimeout(()=>b.textContent='Copy',1500); }
+    }
+    // پس از لود: متن نمایش کوتاه شود اما data-fullِ کامل حفظ می‌شود
+    document.addEventListener('DOMContentLoaded', ()=>{
+      document.querySelectorAll('.addrText[data-full]').forEach(el=>{
+        el.textContent = shorten(el.dataset.full);
+      });
+    });
   </script>
 </head>
 <body>
@@ -67,6 +92,7 @@
     </div>
 
     <div class="grid">
+      <!-- Token Facts -->
       <div class="card col-6">
         <h3>Token Facts</h3>
         <div class="kv">
@@ -80,21 +106,34 @@
         </div>
       </div>
 
+      <!-- Official Addresses -->
       <div class="card col-6">
         <h3>Official Addresses</h3>
-        <div class="kv">
-          <div class="label">Contract</div>
-          <div><code id="c">0x327e395010b2c5b20115cb8ea3a713b8c49aee7c</code> &nbsp;
-               <button id="cbtn" class="btn alt" onclick="copyTxt('c')">Copy</button></div>
 
-          <div class="label">Treasury (Safe)</div>
-          <div><code id="s">0x9d31D9Ad925421E9DC7aF8890F98A24067DFF7b4</code> &nbsp;
-               <button id="sbtn" class="btn alt" onclick="copyTxt('s')">Copy</button></div>
-
-          <div class="label">Deployer (EOA)</div>
-          <div><code id="e">0x7fC3B8219be41c8e389fC551622FCC84772db3f2</code> &nbsp;
-               <button id="ebtn" class="btn alt" onclick="copyTxt('e')">Copy</button></div>
+        <div class="addrRow">
+          <div class="addrLabel">Contract</div>
+          <div class="addrBox">
+            <code class="addrText" id="c" data-full="0x327e395010b2c5b20115cb8ea3a713b8c49aee7c"></code>
+            <button id="cbtn" class="btn alt" onclick="copyAddr('c')">Copy</button>
+          </div>
         </div>
+
+        <div class="addrRow">
+          <div class="addrLabel">Treasury (Safe)</div>
+          <div class="addrBox">
+            <code class="addrText" id="s" data-full="0x9d31D9Ad925421E9DC7aF8890F98A24067DFF7b4"></code>
+            <button id="sbtn" class="btn alt" onclick="copyAddr('s')">Copy</button>
+          </div>
+        </div>
+
+        <div class="addrRow">
+          <div class="addrLabel">Deployer (EOA)</div>
+          <div class="addrBox">
+            <code class="addrText" id="e" data-full="0x7fC3B8219be41c8e389fC551622FCC84772db3f2"></code>
+            <button id="ebtn" class="btn alt" onclick="copyAddr('e')">Copy</button>
+          </div>
+        </div>
+
         <div class="hr"></div>
         <p class="footer">Always verify addresses from this page and PolygonScan before interacting. Official tokens are minted on Polygon only.</p>
       </div>
